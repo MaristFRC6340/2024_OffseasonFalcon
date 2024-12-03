@@ -5,7 +5,7 @@
 package frc.robot.autos;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.SwerveSubsystem;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TrainingAuto extends SequentialCommandGroup {
    * Autonomous for training programmings to set paths and Poses
    * @param s_Swerve Swerve Drive Subsystem
    */
-  public TrainingAuto(Swerve s_Swerve){
+  public TrainingAuto(SwerveSubsystem s_Swerve){
       TrajectoryConfig config =
           new TrajectoryConfig(
                   Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -61,21 +61,21 @@ public class TrainingAuto extends SequentialCommandGroup {
               Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
       thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-      SwerveControllerCommand swerveControllerCommand =
-          new SwerveControllerCommand(
-              exampleTrajectory,
-              s_Swerve::getPose,
-              Constants.Swerve.swerveKinematics,
-              new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-              new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-              thetaController,
-              s_Swerve::setModuleStates,
-              s_Swerve);
+    //   SwerveControllerCommand swerveControllerCommand =
+    //       new SwerveControllerCommand(
+    //           exampleTrajectory,
+    //           s_Swerve::getPose,
+    //           Constants.Swerve.swerveKinematics,
+    //           new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+    //           new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+    //           thetaController,
+    //           s_Swerve::setModuleStates,
+    //           s_Swerve);
 
 
       addCommands(
-          new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
-          swerveControllerCommand
+          new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose()))
+          //swerveControllerCommand
       );
   }
 }

@@ -1,27 +1,40 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.pathplanner.lib.util.PIDConstants;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.SwerveModuleConstants;
+import swervelib.math.Matter;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final double speedControl = 1; // 1.0 is full
+    public static final class AutonConstants {
+        public static  final PIDConstants positionPID = new PIDConstants(.01, 0, 0);
+        public static  final PIDConstants headingPID = new PIDConstants(.01, 0, 0);
 
+    }
     public static final class Swerve {
         //public static final int pigeonID = 1;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
         /* Drivetrain Constants */
+        public static final double MAX_SPEED = 3;
         public static final double trackWidth = Units.inchesToMeters(21.4375);
         public static final double wheelBase = Units.inchesToMeters(21.4375);
         public static final double wheelDiameter = Units.inchesToMeters(3.94);
         public static final double wheelCircumference = wheelDiameter * Math.PI;
+
+        public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+        public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
+        public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
 
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
@@ -139,6 +152,10 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+      }
+
+      public static final class IOConstants {
+        public static final int kDriverPort = 0;
       }
 
 }

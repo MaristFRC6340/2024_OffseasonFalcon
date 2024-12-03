@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +14,7 @@ public class TeleopSwerve extends Command {
     private boolean fieldRelative;
     private boolean openLoop;
     
-    private Swerve s_Swerve;
+    private SwerveSubsystem s_Swerve;
     private Joystick controller;
     private int translationAxis;
     private int strafeAxis;
@@ -23,7 +23,7 @@ public class TeleopSwerve extends Command {
     /**
      * Driver control
      */
-    public TeleopSwerve(Swerve s_Swerve, Joystick controller, int translationAxis, int strafeAxis, int rotationAxis, boolean fieldRelative, boolean openLoop) {
+    public TeleopSwerve(SwerveSubsystem s_Swerve, Joystick controller, int translationAxis, int strafeAxis, int rotationAxis, boolean fieldRelative, boolean openLoop) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -48,7 +48,7 @@ public class TeleopSwerve extends Command {
 
         translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed);
         rotation = rAxis * Constants.Swerve.maxAngularVelocity;
-        s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
+        //s_Swerve.drive(translation, rotation, fieldRelative, openLoop);
 
         // TODO: add gyro reset button
         if(controller.getRawButtonPressed(9)){

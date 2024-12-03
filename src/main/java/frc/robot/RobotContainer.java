@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.io.File;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -23,7 +27,7 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
   /* Controllers */
-  private final Joystick driver = new Joystick(0);
+  private final XboxController driver = new XboxController(Constants.IOConstants.kDriverPort);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -31,18 +35,22 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  //private final  zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
 
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
+  private final SwerveSubsystem s_Swerve = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     boolean fieldRelative = true;
     boolean openLoop = true;
-    s_Swerve.setDefaultCommand(new PhotonFollow(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
-
+    //s_Swerve.setDefaultCommand(new PhotonFollow(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
+    s_Swerve.setDefaultCommand(s_Swerve.driveCommand(
+      () -> MathUtil.applyDeadband(driver.getLeftY(), .1),
+      () -> MathUtil.applyDeadband(driver.getLeftX(), .1),
+      () -> -driver.getRightX(),
+      () -> -driver.getRightY()));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -55,7 +63,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     /* Driver Buttons */
-    zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    //zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
   }
 
   /**
